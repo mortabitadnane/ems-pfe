@@ -36,13 +36,16 @@ public class Employee {
         @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
         private List<Conge> conges;
 
-        @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+        @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
         private Contract contract;
 
         @ManyToOne(cascade = CascadeType.ALL)
         private Department department;
 
-
+        @OneToOne
+        @JoinColumn(name = "user_id")
+        private User user;
+        
 }
 
 

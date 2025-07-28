@@ -8,6 +8,8 @@ public interface EmployeeService {
     EmployeecontractDTO createEmployeeWithContract(EmployeecontractDTO employeecontractDTO);
     EmployeecontractDTO updateEmployee(Long id, EmployeecontractDTO employeecontractDTO);
     EmployeecontractDTO getEmployeeById(Long id);
+    EmployeecontractDTO getEmployeeByUsername(String username);
     List<EmployeecontractDTO> getAllEmployees();
+    void unlinkUserFromEmployee(Long employeeId);
     void deleteEmployee(Long id);
 }

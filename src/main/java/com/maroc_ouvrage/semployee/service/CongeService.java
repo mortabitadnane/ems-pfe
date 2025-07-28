@@ -1,6 +1,6 @@
 package com.maroc_ouvrage.semployee.service;
-
 import com.maroc_ouvrage.semployee.dto.CongeDTO;
+import com.maroc_ouvrage.semployee.model.CongeStatus;
 
 import java.util.List;
 
@@ -17,7 +17,9 @@ public interface CongeService {
     CongeDTO getCongeById(Long congeId);
 
     // Get a leave request by employee CIN
-    CongeDTO getCongeByEmployeeCin(String employeeCin);
+    List<CongeDTO> getCongeByEmployeeCin(String employeeCin);
+
+    void updateStatus(Long congeId, CongeStatus status);
 
     // Get all leave requests
     List<CongeDTO> getAllConge();

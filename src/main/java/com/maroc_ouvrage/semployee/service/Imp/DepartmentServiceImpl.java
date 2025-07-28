@@ -34,6 +34,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public DepartmentDTO updateDepartment(Long id, DepartmentDTO departmentDTO) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        departmentMapper.updateEntityFromDTO(departmentDTO, department); // update existing entity
+
+        department = departmentRepository.save(department); // save updated entity
+
+        return departmentMapper.toDto(department); // return updated DTO
+    }
+
+
+    @Override
     public DepartmentDTO getDepartmentById(Long id) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Department not found"));

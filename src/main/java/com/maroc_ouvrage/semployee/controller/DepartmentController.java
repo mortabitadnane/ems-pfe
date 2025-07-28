@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
@@ -39,6 +40,13 @@ public class DepartmentController {
         return ResponseEntity.ok(departments);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<DepartmentDTO> updateDepartment(@PathVariable Long id, @RequestBody DepartmentDTO departmentDTO) {
+        DepartmentDTO updatedDepartment = departmentService.updateDepartment(id, departmentDTO);
+        return ResponseEntity.ok(updatedDepartment);
+    }
+
+
     @PostMapping("/{departmentId}/assign/{employeeId}")
     public ResponseEntity<Void> assignEmployeeToDepartment(@PathVariable Long departmentId, @PathVariable Long employeeId) {
         departmentService.assignEmployeeToDepartment(employeeId, departmentId);
@@ -46,7 +54,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
         return ResponseEntity.noContent().build();
     }

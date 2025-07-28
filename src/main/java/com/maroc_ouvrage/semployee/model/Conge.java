@@ -18,8 +18,10 @@ public class Conge {
 
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status;
-    private String employeeCin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CongeStatus status;
 
     @Column(nullable = false)
     private String reason;

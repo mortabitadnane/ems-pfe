@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeecontractDTO {
+    private Long userId;
+    private Long employeeid;
     private String cin;
     private String firstname;
     private String lastname;

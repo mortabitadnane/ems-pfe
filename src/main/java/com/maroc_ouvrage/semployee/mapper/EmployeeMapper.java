@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 public interface EmployeeMapper {
 
     // Map Employee and Contract to EmployeecontractDTO
+    @Mapping(source = "employee.id", target = "employeeid")
     @Mapping(source = "employee.cin", target = "cin")
     @Mapping(source = "employee.firstName", target = "firstname")
     @Mapping(source = "employee.lastName", target = "lastname")
@@ -23,6 +24,7 @@ public interface EmployeeMapper {
     @Mapping(source = "contract.contractType", target = "contractType")
     @Mapping(source = "contract.startDate", target = "startDate")
     @Mapping(source = "contract.endDate", target = "endDate")
+    @Mapping(source = "employee.user.id", target = "userId")
     EmployeecontractDTO toDto(Employee employee, Contract contract);
 
     @Mapping(source = "cin", target = "cin")

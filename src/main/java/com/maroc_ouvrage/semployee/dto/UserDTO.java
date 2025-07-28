@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-
-    private Long id;           // The user's unique identifier
-    private String email;      // The user's email
-    private String fullName;   // The user's full name
-    private String role;       // The user's role (e.g., admin, user)
+    private Long id;
+    private String username;
+    private String email;
+    private String password; // <-- don't forget this one!
+    private Set<String> roles;
 }
 

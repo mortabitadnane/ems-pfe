@@ -5,10 +5,13 @@ import com.maroc_ouvrage.semployee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
@@ -37,6 +40,20 @@ public class EmployeeController {
         EmployeecontractDTO employeecontractDTO = employeeService.getEmployeeById(id);
         return ResponseEntity.ok(employeecontractDTO);
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<EmployeecontractDTO> getMyEmployee(Authentication authentication) {
+        String username = authentication.getName();
+        EmployeecontractDTO employeeDTO = employeeService.getEmployeeByUsername(username);
+        return ResponseEntity.ok(employeeDTO);
+    }
+    @PutMapping("/{id}/unlink-user")
+    public ResponseEntity<Void> unlinkUser(@PathVariable Long id) {
+        employeeService.unlinkUserFromEmployee(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
     @GetMapping
     public ResponseEntity<List<EmployeecontractDTO>> getAllEmployees() {

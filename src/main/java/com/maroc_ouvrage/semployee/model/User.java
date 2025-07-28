@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -17,12 +19,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -31,10 +27,17 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    private boolean enabled = true;
 
-    @Column(nullable = false)
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
-
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Employee employee;
 }
 

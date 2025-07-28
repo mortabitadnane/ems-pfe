@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class DepartmentDTO {
 
-        private Long id;
+        private Long departmentId;
         private String name;
         private String location;
 
