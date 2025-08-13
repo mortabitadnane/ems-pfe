@@ -1,6 +1,10 @@
 package com.maroc_ouvrage.semployee.controller;
 
 import com.maroc_ouvrage.semployee.dto.LoginRequest;
+import com.maroc_ouvrage.semployee.dto.UserDTO;
+import com.maroc_ouvrage.semployee.mapper.UserMapper;
+import com.maroc_ouvrage.semployee.model.User;
+import com.maroc_ouvrage.semployee.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -20,9 +24,13 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationManager authManager;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
-    public AuthController(AuthenticationManager authManager) {
+    public AuthController(AuthenticationManager authManager, UserService userService, UserMapper userMapper) {
         this.authManager = authManager;
+        this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/login")
@@ -56,6 +64,13 @@ public class AuthController {
         }
         return ResponseEntity.ok("Logout successful");
     }
+
+    @GetMapping("/me")
+    public UserDTO getCurrentUser(Authentication auth) {
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow();
+        return userMapper.toDTO(user);
+    }
+
 
 }
 

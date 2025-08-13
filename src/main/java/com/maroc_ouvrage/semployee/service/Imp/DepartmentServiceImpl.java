@@ -1,9 +1,9 @@
 package com.maroc_ouvrage.semployee.service.Imp;
 
+import com.maroc_ouvrage.semployee.audit.Auditable;
 import com.maroc_ouvrage.semployee.dto.DepartmentDTO;
 import com.maroc_ouvrage.semployee.mapper.DepartmentMapper;
-import com.maroc_ouvrage.semployee.model.Department;
-import com.maroc_ouvrage.semployee.model.Employee;
+import com.maroc_ouvrage.semployee.model.*;
 import com.maroc_ouvrage.semployee.repo.DepartmentRepository;
 import com.maroc_ouvrage.semployee.repo.EmployeeRepository;
 import com.maroc_ouvrage.semployee.service.DepartmentService;
@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,6 +26,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Auditable(action = "DEPARTMENT_CREATED", details = "create a department successfully")
     @Override
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO) {
         System.out.println("Mapping departmentDTO: " + departmentDTO);
@@ -33,6 +35,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentMapper.toDto(department);
     }
 
+    @Auditable(action = "DEPARTMENT_UPDATED", details = "update a department successfully")
     @Override
     public DepartmentDTO updateDepartment(Long id, DepartmentDTO departmentDTO) {
         Department department = departmentRepository.findById(id)
@@ -41,6 +44,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentMapper.updateEntityFromDTO(departmentDTO, department); // update existing entity
 
         department = departmentRepository.save(department); // save updated entity
+
 
         return departmentMapper.toDto(department); // return updated DTO
     }
@@ -59,6 +63,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentMapper.toDtoList(departments);
     }
 
+    @Auditable(action = "EMPLOYEE_ASSIGNED", details = "assign an employee to department successfully")
     @Override
     public void assignEmployeeToDepartment(Long employeeId, Long departmentId) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -72,6 +77,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
+    @Auditable(action = "DEPARTMENT_DELETED", details = "delete a department successfully")
     @Override
     public void deleteDepartment(Long departmentId) {
         departmentRepository.deleteById(departmentId);

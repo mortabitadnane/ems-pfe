@@ -1,6 +1,7 @@
 package com.maroc_ouvrage.semployee.service;
 import com.maroc_ouvrage.semployee.dto.CongeDTO;
 import com.maroc_ouvrage.semployee.model.CongeStatus;
+import com.maroc_ouvrage.semployee.model.User;
 
 import java.util.List;
 
@@ -26,6 +27,12 @@ public interface CongeService {
 
     // Delete a leave request by contract ID
     void deleteConge(Long congeId);
+
+    CongeDTO updateMyConge(Long congeId, CongeDTO dto, User user);
+    void deleteMyConge(Long congeId, User user);
+    List<CongeDTO> getMyLeaves(User user);
+    CongeDTO createMyConge(CongeDTO congeDTO, User user);
+
 }
 
 

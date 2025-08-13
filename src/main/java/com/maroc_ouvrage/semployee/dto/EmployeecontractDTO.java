@@ -17,6 +17,7 @@ public class EmployeecontractDTO {
     private String lastname;
     private String position;
     private String rib;
+    private String profileImageUrl;
     private Double salary;
     private String contractType;
     private LocalDate startDate;

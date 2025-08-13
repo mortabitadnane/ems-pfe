@@ -32,6 +32,9 @@ public class Employee {
         @Column(length = 24, nullable = false, unique = true)
         private String rib;
 
+        @Column(name = "profile_image_url")
+        private String profileImageUrl;
+
 
         @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
         private List<Conge> conges;

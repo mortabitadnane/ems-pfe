@@ -8,7 +8,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -62,7 +61,7 @@ public class SecurityConfig {
                         .configurationSource(request -> {
                             CorsConfiguration config = new CorsConfiguration();
                             config.setAllowedOriginPatterns(List.of("http://localhost:4200","http://localhost:7777"));
-                            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS"));
                             config.setAllowedHeaders(List.of("*"));
                             config.setAllowCredentials(true);// important if using cookies/session
                             return config;
@@ -73,21 +72,29 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasAnyAuthority("USER", "CREATOR", "EDITOR", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAnyAuthority("ADMIN", "CREATOR")
-                        .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyAuthority("ADMIN", "EDITOR")
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasAnyAuthority("USER", "EMPLOYEE", "RH MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
                         .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("USER", "CREATOR", "EDITOR", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasAnyAuthority("ADMIN", "CREATOR")
-                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyAuthority("ADMIN", "EDITOR")
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("USER", "EMPLOYEE", "RH MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAuthority("ADMIN")
                         // Departments
-                        .requestMatchers(HttpMethod.GET, "/api/departments/**").hasAnyAuthority("USER", "CREATOR", "EDITOR", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/departments/**").hasAnyAuthority("USER", "EMPLOYEE", "EDITOR", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/departments/**").hasAnyAuthority("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.PUT, "/api/departments/**").hasAnyAuthority("ADMIN", "EDITOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/departments/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/conges/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/conges/my/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/conges/my/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.PUT, "/api/conges/my/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/conges/my/**").hasAnyAuthority("ADMIN", "EMPLOYEE")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/api/attendance/**").permitAll()
+                        .requestMatchers("/api/notifications/**").permitAll()
+                        .requestMatchers("/api/audit-logs/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

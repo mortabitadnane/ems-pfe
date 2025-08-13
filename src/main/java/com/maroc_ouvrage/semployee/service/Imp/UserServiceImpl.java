@@ -1,5 +1,6 @@
 package com.maroc_ouvrage.semployee.service.Imp;
 
+import com.maroc_ouvrage.semployee.audit.Auditable;
 import com.maroc_ouvrage.semployee.dto.UserDTO;
 import com.maroc_ouvrage.semployee.mapper.UserMapper;
 import com.maroc_ouvrage.semployee.model.Role;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
                             .orElseThrow(() -> new RuntimeException("Role not found: " + name)))
                     .collect(Collectors.toSet());
         }
-
+        @Auditable(action = "USER_CREATED", details = "create a user successfully")
         @Override
         @Transactional
         public UserDTO createUser(UserDTO dto) {
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService {
             return userRepository.findById(id).map(userMapper::toDTO);
         }
 
+        @Auditable(action = "USER_UPDATED", details = "update a user successfully")
         @Transactional
         @Override
         public UserDTO updateUser(Long id, UserDTO dto) {
@@ -85,6 +87,7 @@ public class UserServiceImpl implements UserService {
             return userMapper.toDTO(updatedUser);
         }
 
+        @Auditable(action = "USER_DELETED", details = "delete a user successfully")
         @Override
         public void deleteUser(Long id) {
                 userRepository.deleteById(id);
