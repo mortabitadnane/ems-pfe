@@ -30,6 +30,11 @@ public class MyUserDetails implements UserDetails {
         return authorities;
     }
 
+    public Long getId() {
+        return user.getId();
+    }
+
+
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -39,6 +44,7 @@ public class MyUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

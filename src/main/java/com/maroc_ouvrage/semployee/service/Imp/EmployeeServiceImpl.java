@@ -13,8 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -178,4 +185,38 @@ public class EmployeeServiceImpl implements EmployeeService {
         contractRepository.delete(contract);
         employeeRepository.delete(employee);
     }
+
+    public void uploadEmployeeImage(Long employeeId, MultipartFile imageFile) throws IOException {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        String uploadsDir = "uploads/images/";
+        Files.createDirectories(Paths.get(uploadsDir));
+
+        String fileExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
+        String fileName = "employee_" + employeeId + "." + fileExtension;
+        Path filePath = Paths.get(uploadsDir, fileName);
+
+        // Écrase l'ancienne image si elle existe
+        Files.write(filePath, imageFile.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+        // Enregistre le chemin dans l'entité
+        employee.setProfileImageUrl("/uploads/images/" + fileName);
+        employeeRepository.save(employee);
+    }
+
+    public void uploadProfileImageForAuthenticatedUser(MultipartFile imageFile) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Employee employee = employeeRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Employee not found for user"));
+
+        uploadEmployeeImage(employee.getId(), imageFile);
+    }
+
+
 }

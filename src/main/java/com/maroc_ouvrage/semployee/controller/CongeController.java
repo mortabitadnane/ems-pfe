@@ -5,7 +5,6 @@ import com.maroc_ouvrage.semployee.service.CongeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,6 @@ public class CongeController {
     }
 
     // Update only the status of a leave request (approve/deny)
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/{congeId}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable Long congeId, @RequestParam CongeStatus status) {
         congeService.updateStatus(congeId, status);
@@ -46,7 +44,6 @@ public class CongeController {
     }
 
     // Get a leave request by contract ID
-    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/{congeId}")
     public ResponseEntity<CongeDTO> getCongeById(@PathVariable Long congeId) {
         CongeDTO congeDTO = congeService.getCongeById(congeId);

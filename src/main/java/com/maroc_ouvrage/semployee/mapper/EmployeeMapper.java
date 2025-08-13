@@ -25,6 +25,7 @@ public interface EmployeeMapper {
     @Mapping(source = "contract.startDate", target = "startDate")
     @Mapping(source = "contract.endDate", target = "endDate")
     @Mapping(source = "employee.user.id", target = "userId")
+    @Mapping(source = "employee.profileImageUrl", target = "profileImageUrl")
     EmployeecontractDTO toDto(Employee employee, Contract contract);
 
     @Mapping(source = "cin", target = "cin")
@@ -32,6 +33,7 @@ public interface EmployeeMapper {
     @Mapping(source = "lastname", target = "lastName")
     @Mapping(source = "position", target = "position")
     @Mapping(source = "rib", target = "rib")
+    @Mapping(source = "profileImageUrl", target = "profileImageUrl")
     void toEmployeeEntity(EmployeecontractDTO dto, @MappingTarget Employee employee);
 
     @Mapping(source = "salary", target = "salary")
