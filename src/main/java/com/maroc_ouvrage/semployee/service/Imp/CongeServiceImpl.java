@@ -41,6 +41,8 @@ public class CongeServiceImpl implements CongeService {
         // 🧱 2. Convert DTO to entity (employee is not set yet)
         Conge conge = congeMapper.toEntity(congeDTO);
 
+        conge.setEmployee(employee);
+
         User userRecipient = employee.getUser();  // <-- make sure this is the right getter
 
         if (userRecipient != null) {

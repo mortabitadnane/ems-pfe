@@ -2,7 +2,10 @@ package com.maroc_ouvrage.semployee.service.Imp;
 
 import com.maroc_ouvrage.semployee.audit.Auditable;
 import com.maroc_ouvrage.semployee.dto.DepartmentDTO;
+import com.maroc_ouvrage.semployee.dto.EmployeecontractDTO;
+import com.maroc_ouvrage.semployee.exception.NoEmployeesFoundException;
 import com.maroc_ouvrage.semployee.mapper.DepartmentMapper;
+import com.maroc_ouvrage.semployee.mapper.EmployeeMapper;
 import com.maroc_ouvrage.semployee.model.*;
 import com.maroc_ouvrage.semployee.repo.DepartmentRepository;
 import com.maroc_ouvrage.semployee.repo.EmployeeRepository;
@@ -25,6 +28,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
 
     @Auditable(action = "DEPARTMENT_CREATED", details = "create a department successfully")
     @Override
@@ -62,6 +69,21 @@ public class DepartmentServiceImpl implements DepartmentService {
         List<Department> departments = departmentRepository.findAll();
         return departmentMapper.toDtoList(departments);
     }
+
+    @Override
+    public List<EmployeecontractDTO> getEmployeesByDepartment(Long deptId) {
+        List<Employee> employees = employeeRepository.findByDepartmentId(deptId);
+
+        if (employees.isEmpty()) {
+            throw new NoEmployeesFoundException(deptId);
+        }
+
+        // Map each employee to DTO using the mapper
+        return employees.stream()
+                .map(e -> employeeMapper.toDto(e, e.getContract()))
+                .toList();
+    }
+
 
     @Auditable(action = "EMPLOYEE_ASSIGNED", details = "assign an employee to department successfully")
     @Override

@@ -1,6 +1,8 @@
 package com.maroc_ouvrage.semployee.service;
 
 import com.maroc_ouvrage.semployee.dto.DepartmentDTO;
+import com.maroc_ouvrage.semployee.dto.EmployeecontractDTO;
+import com.maroc_ouvrage.semployee.model.Employee;
 
 import java.util.List;
 
@@ -18,5 +20,7 @@ public interface DepartmentService {
     void deleteDepartment(Long id);
 
     void assignEmployeeToDepartment(Long employeeId, Long departmentId);
+
+    List<EmployeecontractDTO> getEmployeesByDepartment(Long deptId);
 }
 

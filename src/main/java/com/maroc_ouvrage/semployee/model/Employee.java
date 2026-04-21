@@ -1,5 +1,6 @@
 package com.maroc_ouvrage.semployee.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,9 +38,11 @@ public class Employee {
 
 
         @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+        @JsonIgnore
         private List<Conge> conges;
 
         @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+        @JsonIgnore
         private Contract contract;
 
         @ManyToOne(cascade = CascadeType.ALL)

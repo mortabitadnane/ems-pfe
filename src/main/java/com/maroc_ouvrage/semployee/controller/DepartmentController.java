@@ -1,6 +1,8 @@
 package com.maroc_ouvrage.semployee.controller;
 
 import com.maroc_ouvrage.semployee.dto.DepartmentDTO;
+import com.maroc_ouvrage.semployee.dto.EmployeecontractDTO;
+import com.maroc_ouvrage.semployee.model.Employee;
 import com.maroc_ouvrage.semployee.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,6 +59,14 @@ public class DepartmentController {
     public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{deptId}/employees")
+    public ResponseEntity<List<EmployeecontractDTO>> getEmployeesByDepartment(
+            @PathVariable Long deptId) {
+
+        List<EmployeecontractDTO> employees = departmentService.getEmployeesByDepartment(deptId);
+        return ResponseEntity.ok(employees);
     }
 }
 
